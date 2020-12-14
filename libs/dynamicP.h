@@ -13,7 +13,7 @@ void calculateObjects(struct object *object_types, int max_weight, int num_objec
     // Go through C and P Matrices and fills them up
     for (int i = 0; i < num_objects; i++)
     {
-        for (int j = 1; j < max_weight; j++)
+        for (int j = 0; j < max_weight; j++)
         {
             if (i == 0 && j < object_types[i].weight) // If lightest object and weight is bigger than j weight
             {
@@ -38,38 +38,32 @@ void calculateObjects(struct object *object_types, int max_weight, int num_objec
         }
     }
 
-    // Print C matrix to check
+   /*  // Print C matrix to check
     printf("\n");
     for (int i = 0; i < num_objects; i++)
     {
-        for (int j = 1; j < max_weight; j++)
-            printf("%d\t", *((C + i * max_weight) + j));
+        for (int j = 0; j < max_weight; j++){
+            printf("%d\t", *((P + i * max_weight) + j));
         printf("\n");
-    }
+    } */
 }
 
 // Function that given the tables of Dynamic Programming finds the most efficient way to give change back
-void backpack(int change, int num_coins, int *coin_types, bool *permutations, int *coins, int *solution)
+void backpack(struct object *object_types, int max_weight, int num_objects, bool *P, int *C, int *solution)
 {
-    int i = num_coins, j = change - 1, index;
+    int i = num_objects, j = max_weight, index;
 
     // Initialize solution vector to zero
-    for (index = 0; index < num_coins; index++)
+    for (index = 0; index < num_objects; index++)
         solution[index] = 0;
 
     // While there is more than one type of coin and there's still some change to give back
     while (i != 0 && j != 0)
     {
-        if (*((permutations + i * change) + j) == false) // If this coin is not used, skip it
-            i--;
-        else // Otherwise
-        {
-            solution[i] = solution[i] + 1; // Add one of these coins to the solution vector
-            j = j - coin_types[i];         // Substract its value from the pending change
+        if (*((P + i * max_weight) + j) == true){ // If this coin is not used, skip it
+            solution[i]+=1;
+            j = j-object_types[i].weight;
         }
+        i--;
     }
-
-    // If there are is only one type of coin, add the number of coins needed to give back the change left
-    if (i == 0)
-        solution[0] = (*((coins + i * change) + j) + solution[0]);
 }

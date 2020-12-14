@@ -40,23 +40,17 @@ int main(int argc, char *argv[])
         calculateObjects(object_types, max_weight + 1, num_objects, (bool *)P, (int *)C);
 
         // Calculate the objects to carry (using the generated tables)
-        /*int solution[num_coins];
-        backpack(change+1, num_coins, coin_types, (bool *)permutations, (int *)coins, solution);
+        int solution[num_objects];
+        backpack(object_types, max_weight + 1, num_objects, (bool *)P, (int *)C, solution);
 
-        // Give change back
-        printf("\nThe most efficient way to give back %d is:\n", change);
-        for (int i = 0; i < num_coins; i++)
-            printf("%d coins of %d\n", solution[i], coin_types[i]);
-        printf("\n");
-        
+        // Pack up the backpack
+        printf("\nThe most efficient way to pack is:\n");
         for (int i = 0; i < num_objects; i++)
-    {
-        printf("\nWeight: %d", object_types[i].weight);
-        printf(" Value: %d", object_types[i].value);
-    }
-    printf("\n");
-        
-        */
+        {
+            if (solution[i] != 0)
+                printf("%d objects of weight %d and value %d\n", solution[i], object_types[i].weight, object_types[i].value);
+        }
+        printf("\n");
     }
 
     printf(ANSI_COLOR_MAGENTA "END OF PROGRAM" ANSI_COLOR_RESET "\n");
